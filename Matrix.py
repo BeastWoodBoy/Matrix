@@ -35,7 +35,7 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
             for columnNum in range(self.columns):
                 row.append(self.matrix[rowNum][columnNum] + m2.matrix[rowNum][columnNum])
             newMat.append(row)
-        return newMat
+        return matrix(newMat)
 
     def subMatrix(self, rowNumRmv,columnNumRmv): # Used for finding determinant as it requires 
         newMat = []
@@ -60,7 +60,16 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
             sum += sign*entry* self.subMatrix(0,columnNum).det()
             sign *= -1
         return sum
+    def transpose(self):
+        tp =[]
 
+        for colNum,_ in enumerate(self.matrix[0]):
+            row = []
+            for r in self.matrix:
+                row.append(r[colNum])
+            tp.append(row)
+
+        return matrix(tp)
     def __eq__(self,m2):
         if not(self.rows == m2.rows and self.columns == m2.columns): # Ensures dimensions are the same first to avoid indexing errors
             return False
@@ -69,6 +78,7 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
                 if self.matrix[rowNum][columnNum] != m2.matrix[rowNum][columnNum]:
                     return False
         return True
+
     def __str__(self): # Formats Matricies to make them easier to read
         out = ""
 
@@ -86,4 +96,4 @@ matC = matrix([[1,2,3],[4,5,6]])
 matD = matrix([[5,4],[3,2]])
 matE = matrix([[1,2,3],[4,5,6],[7,8,9]])
 matF = matrix([[2,0,0],[0,2,0],[0,0,2]])
-print(matA)
+print(matB.transpose())
