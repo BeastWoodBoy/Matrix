@@ -1,3 +1,5 @@
+class DimensionError(Exception):
+    ...
 class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
     def __init__(self,matrix):
         self.matrix = matrix
@@ -13,16 +15,24 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
 
     def __mul__(self,m2):
         # m1 * m2
-        if self.columns != m2.rows: # Ensures it's a legal Multiplication
-            raise ValueError
-        dimensions = (self.rows, m2.columns)
         resultMat = []
-        for rowNum in range(dimensions[0]): # Calls the calcEntry method for each cell of the new matrix and adds it to resultMat
-            row = []
-            for columnNum in range(dimensions[1]):
-                row.append(self.calcEntry(m2,rowNum,columnNum))
-            resultMat.append(row)
-        return resultMat
+        if type(m2) in (int,float):
+            for rowNum,_ in enumerate(self.matrix):
+                newRow = []
+                for entry in self.matrix[rowNum]:
+                    newRow.append(entry * m2)
+                resultMat.append(newRow)
+        else:
+            if self.columns != m2.rows: # Ensures it's a legal Multiplication
+                raise ValueError
+            dimensions = (self.rows, m2.columns)
+            
+            for rowNum in range(dimensions[0]): # Calls the calcEntry method for each cell of the new matrix and adds it to resultMat
+                row = []
+                for columnNum in range(dimensions[1]):
+                    row.append(self.calcEntry(m2,rowNum,columnNum))
+                resultMat.append(row)
+        return matrix(resultMat)
 
 
     def __add__(self,m2):
@@ -70,6 +80,52 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
             tp.append(row)
 
         return matrix(tp)
+    def trace(self): 
+        trc = 0
+        for diagonalIdx in range(min(self.rows,self.columns)): # Iterates through the idx pair for every diagonal element and adds it up
+            trc += self.matrix[diagonalIdx][diagonalIdx]
+        return trc
+
+    def addColumns(self,m2): # Adds the columns of another matrix to the right of self
+        if self.rows != m2.rows:
+            raise DimensionError
+        newMat = []
+        for rowNum in range(self.rows):
+            curRow = []
+            for elem in self.matrix[rowNum]:
+                curRow.append(elem)
+            for elem in m2.matrix[rowNum]:
+                curRow.append(elem)
+            newMat.append(curRow)
+        return matrix(newMat)
+
+    def addRows(self,m2): # Adds the rows of another matrix to the bottom of self
+        if self.columns != m2.columns:
+            raise DimensionError
+        newMat = []
+        for row in self.matrix :
+            newMat.append(row)
+        for row in m2.matrix:
+            newMat.append(row)
+        return matrix(newMat)
+    # TODO
+    # def echelon(self,diagNum = 0):
+    #     if diagNum+1 >= self.columns or diagNum+1 >= self.rows: # Base case is when it's reduced up to the last column/row depending on what comes first
+    #         return self
+    #     row1 = self.matrix[0]
+    #     newMat = matrix([row1])
+    #     for rowNum,row in enumerate(self.matrix[diagNum+1:]):
+    #         if abs(row[diagNum]) > 0.0001:
+    #             rowNum += 1
+    #             newRow = (matrix([row]) * -(row1[diagNum]/row[diagNum]))
+    #             newMat = newMat.addRows(newRow + matrix([row1]))
+    #         else:
+    #             newRow = matrix([row1])
+    #             newMat = newMat.addRows(newRow)
+    #         print(newRow)
+    #     return newMat.echelon(diagNum + 1)
+        
+            
     def __eq__(self,m2):
         if not(self.rows == m2.rows and self.columns == m2.columns): # Ensures dimensions are the same first to avoid indexing errors
             return False
@@ -85,7 +141,7 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
         for rowNum in range(self.rows):
             out = out + "| "
             for columnNum in range(self.columns):
-                out = out + str(self.matrix[rowNum][columnNum])+ " | "
+                out = out + str(round(self.matrix[rowNum][columnNum],2))+ " | "
             out = out + "\n"
         return out
 
@@ -96,4 +152,6 @@ matC = matrix([[1,2,3],[4,5,6]])
 matD = matrix([[5,4],[3,2]])
 matE = matrix([[1,2,3],[4,5,6],[7,8,9]])
 matF = matrix([[2,0,0],[0,2,0],[0,0,2]])
-print(matB.transpose())
+matG = matrix([[1,4],[2,5],[3,6]])
+matH = matrix([[1,2,3],[0,2,3],[0,4,6]])
+print(matC.addColumns(matD))
