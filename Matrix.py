@@ -2,6 +2,11 @@ class DimensionError(Exception):
     ...
 class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
     def __init__(self,matrix):
+        if matrix != []:
+            cols = len(matrix[0])
+            for row in matrix:
+                if len(row) != cols:
+                    return DimensionError
         self.matrix = matrix
         self.rows = len(self.matrix)
         self.columns = len(self.matrix[0])
@@ -9,12 +14,13 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
     def calcEntry(self,m2,row,column):
         sum = 0
         for idx in range(self.columns): # Sums the product of all elements in the row and column 
-            print(row,column)
             sum += self.matrix[row][idx] * m2.matrix[idx][column]
         return sum
 
     def __mul__(self,m2):
         # m1 * m2
+        if self.columns != m2.rows:
+            return DimensionError
         resultMat = []
         if type(m2) in (int,float):
             for rowNum,_ in enumerate(self.matrix):
@@ -108,22 +114,6 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
         for row in m2.matrix:
             newMat.append(row)
         return matrix(newMat)
-    # TODO
-    # def echelon(self,diagNum = 0):
-    #     if diagNum+1 >= self.columns or diagNum+1 >= self.rows: # Base case is when it's reduced up to the last column/row depending on what comes first
-    #         return self
-    #     row1 = self.matrix[0]
-    #     newMat = matrix([row1])
-    #     for rowNum,row in enumerate(self.matrix[diagNum+1:]):
-    #         if abs(row[diagNum]) > 0.0001:
-    #             rowNum += 1
-    #             newRow = (matrix([row]) * -(row1[diagNum]/row[diagNum]))
-    #             newMat = newMat.addRows(newRow + matrix([row1]))
-    #         else:
-    #             newRow = matrix([row1])
-    #             newMat = newMat.addRows(newRow)
-    #         print(newRow)
-    #     return newMat.echelon(diagNum + 1)
         
             
     def __eq__(self,m2):
@@ -144,14 +134,3 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
                 out = out + str(round(self.matrix[rowNum][columnNum],2))+ " | "
             out = out + "\n"
         return out
-
-
-matA = matrix([[1,2,3],[4,5,6]])
-matB = matrix([[1,2],[3,4],[5,6]])
-matC = matrix([[1,2,3],[4,5,6]])
-matD = matrix([[5,4],[3,2]])
-matE = matrix([[1,2,3],[4,5,6],[7,8,9]])
-matF = matrix([[2,0,0],[0,2,0],[0,0,2]])
-matG = matrix([[1,4],[2,5],[3,6]])
-matH = matrix([[1,2,3],[0,2,3],[0,4,6]])
-print(matC.addColumns(matD))
