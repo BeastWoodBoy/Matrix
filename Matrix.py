@@ -1,4 +1,7 @@
+from copy import deepcopy
 class DimensionError(Exception):
+    ...
+class NotDefinedYet(Exception):
     ...
 class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
     def __init__(self,matrix):
@@ -40,7 +43,33 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
                 resultMat.append(row)
         return matrix(resultMat)
 
-
+    def __pow__(self,exponent):
+        if exponent < 0:
+            raise NotDefinedYet
+            self.inverse()
+            exponent = abs(exponent)
+        newMat = deepcopy(self)
+        print(newMat)
+        for _ in range(exponent-1):
+            newMat *= self
+        return newMat
+    def inverse(self):
+        newMat = []
+        for rowNum in self.rows:
+            currentRow = []
+            for colNum in self.columns:
+                print("Nothing Yet")
+    def cofactor(self,rowNum,colNum):
+        return (-1)**(rowNum+colNum) * (self.subMatrix(rowNum-1,colNum-1)).det()
+    def adjoint(self):
+        adjMat = []
+        for rowNum in range(self.rows):
+            row = []
+            for colNum in range(self.columns):
+                row.append(self.cofactor(rowNum+1,colNum+1))
+            adjMat.append(row)
+            row = []
+        return matrix(adjMat).transpose()
     def __add__(self,m2):
         # m1 + m2
         if not(self.rows == m2.rows and self.columns == m2.columns): # Ensures it's a legal addition

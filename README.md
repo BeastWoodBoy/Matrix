@@ -10,3 +10,9 @@ Current Features:
 - Matrix Multiplication
 - Matrix Addition
 - And a few other helper methods to make everything as readable as possible
+- Cofactor
+- Adjoint
+
+Recently Added:
+- Cofactor
+- Adjoint
