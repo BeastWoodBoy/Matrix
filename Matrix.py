@@ -43,7 +43,7 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
                 resultMat.append(row)
         return matrix(resultMat)
 
-    def __pow__(self,exponent):
+    def __pow__(self,exponent): # Used to take exponents of matricies
         if exponent < 0:
             self = self.inverse()
             exponent = abs(exponent)
@@ -51,7 +51,7 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
         for _ in range(exponent-1):
             newMat *= self
         return newMat
-    def inverse(self):
+    def inverse(self): # Returns the unverse of a matrix; This is done using the adjoint/determinant method for the inverse
         determinant = self.det()
         adjoint = self.adjoint()
         invMat = []
@@ -61,9 +61,9 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
                 currentRow.append(elem/determinant)
             invMat.append(currentRow)
         return matrix(invMat)
-    def cofactor(self,rowNum,colNum):
+    def cofactor(self,rowNum,colNum): # Returns the cofactor of a cell given the matrix itself, and the row and column of the cell
         return (-1)**(rowNum+colNum) * (self.subMatrix(rowNum,colNum)).det()
-    def adjoint(self):
+    def adjoint(self): # Returnes the Adjoint Matrix given a matrix object; returned the transpose of the matrixs' cofactor matrix
         adjMat = []
         for rowNum in range(self.rows):
             row = []
@@ -72,7 +72,7 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
             adjMat.append(row)
             row = []
         return matrix(adjMat).transpose()
-    def __add__(self,m2):
+    def __add__(self,m2): # Definition for the sum of a matrix and another matrix
         # m1 + m2
         if not(self.rows == m2.rows and self.columns == m2.columns): # Ensures it's a legal addition
             raise ValueError
