@@ -9,7 +9,7 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
             cols = len(matrix[0])
             for row in matrix:
                 if len(row) != cols:
-                    return DimensionError
+                    raise DimensionError
         self.matrix = matrix
         self.rows = len(self.matrix)
         self.columns = len(self.matrix[0])
@@ -45,28 +45,30 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
 
     def __pow__(self,exponent):
         if exponent < 0:
-            raise NotDefinedYet
-            self.inverse()
+            self = self.inverse()
             exponent = abs(exponent)
         newMat = deepcopy(self)
-        print(newMat)
         for _ in range(exponent-1):
             newMat *= self
         return newMat
     def inverse(self):
-        newMat = []
-        for rowNum in self.rows:
+        determinant = self.det()
+        adjoint = self.adjoint()
+        invMat = []
+        for rowNum in range(adjoint.rows):
             currentRow = []
-            for colNum in self.columns:
-                print("Nothing Yet")
+            for elem in adjoint.matrix[rowNum]:
+                currentRow.append(elem/determinant)
+            invMat.append(currentRow)
+        return matrix(invMat)
     def cofactor(self,rowNum,colNum):
-        return (-1)**(rowNum+colNum) * (self.subMatrix(rowNum-1,colNum-1)).det()
+        return (-1)**(rowNum+colNum) * (self.subMatrix(rowNum,colNum)).det()
     def adjoint(self):
         adjMat = []
         for rowNum in range(self.rows):
             row = []
             for colNum in range(self.columns):
-                row.append(self.cofactor(rowNum+1,colNum+1))
+                row.append(self.cofactor(rowNum,colNum))
             adjMat.append(row)
             row = []
         return matrix(adjMat).transpose()
@@ -98,6 +100,8 @@ class matrix(): # Just a simple cheat sheet for the first half of Lin alg 1
             raise ValueError
         sign = 1
         sum = 0
+        if self.rows == 1: # Base case For 1x1 matricies
+            return self.matrix[0][0]
         if self.rows == 2: # Base case when matrix is square
             return self.matrix[0][0] * self.matrix[1][1] - self.matrix[0][1] * self.matrix[1][0]
 

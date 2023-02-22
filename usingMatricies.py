@@ -9,10 +9,12 @@ if "y" == input("Would you like to make matricies from here?").lower():
     matricies = []
     for matrixNum in range(numMatricies):
         print(f"Matrix #{matrixNum}")
-        try:
-            rows, cols = int(input("Number of columns: ")),int(input("Number of columns: "))
-        except:
-            print("Invalid Inputs")
+        while True:
+            try:
+                rows, cols = int(input("Number of columns: ")),int(input("Number of columns: "))
+                break
+            except:
+                print("Invalid Inputs")
         mtx = []
         currentRow = []
         for rowNumber in range(rows):
@@ -24,11 +26,10 @@ if "y" == input("Would you like to make matricies from here?").lower():
 
 # definition of a matrix
 matrix1 = matrix([
-    [2,5,-1],
-    [0,3,4],
-    [1,-2,-5]
+    [-1,2],
+    [1,3]
     ])
-print(matrix1.adjoint())
+print(matrix1**3)
 # for rowNum in range(matrix1.rows):
 #     row = []
 #     for colNum in range(matrix1.columns):
