@@ -9,10 +9,12 @@ Current Features:
 - Trace
 - Matrix Multiplication
 - Matrix Addition
-- And a few other helper methods to make everything as readable as possible
 - Cofactor
 - Adjoint
+- Inverse
+- And a few other helper methods to make everything as readable as possible
 
 Recently Added:
 - Cofactor
 - Adjoint
+- Inverse
